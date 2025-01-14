@@ -9,7 +9,7 @@ document.getElementById('btn-search').addEventListener('click', () => {
      if(validateEmptyInput(userName)) return
      getUserData(userName)
 })
-dd
+
 
 
 document.getElementById('input-search').addEventListener('keyup', (e) => {
