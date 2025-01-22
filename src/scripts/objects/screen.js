@@ -22,17 +22,31 @@ const screen = {
         }
 
         let eventItens = ''
-        user.events.forEach(events => eventItens += `<li> <p>${events.name}</p></li>`)
+        if(Array.isArray(user.events) && user.events.length > 0){
+            user.events.forEach(event =>{
+                if (event.payload && event.payload.description) {
+                    if (event.type === 'CreateEvent') {
+                        eventItens += `<li><strong>${event.repo.name}</strong>: Criou algo no repositório.</li>`
+                    } else if (event.type === 'PushEvent') {
+                        eventItens += `<li><strong>${event.repo.name}</strong>: Realizou um push no repositório.</li>`
+                    }
+                }
 
-        if(user.events.length > 0){
-            this.userProfile.innerHTML = `<div class="repositories-events section">
-                                                <h2>Eventos</h2>
-                                                <ul>${eventItens}</ul>
-                                            </div>`
-                                            
-                                            
+            })
+        } 
+        if (eventItens){
+        this.userProfile.innerHTML += `<div class="repositories-events section">
+                                            <h2>Eventos</h2>
+                                            <ul>${eventItens}</ul>
+                                        </div>`
+        } else {
+            this.userProfile.innerHTML += `<div class= "repositories-events section">
+                                            <h2>Eventos</h2>
+                                            <p>Nenhum evento válido encontrado.</p>
+                                          </div>`
         }
 
+        
 
 
     
