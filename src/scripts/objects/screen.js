@@ -1,6 +1,6 @@
 const screen = {
     userProfile: document.querySelector('.profile-data'),
-    renderUser(user){
+    renderUser(user) {
         this.userProfile.innerHTML = `<div class="info">
                                <img src="${user.avatarUrl}" alt= "Foto do perfil do usuário" />
                                 <div class="data">
@@ -9,33 +9,43 @@ const screen = {
                                      <p>Seguidores: ${user.numberFollowers}</p>
                                      <p>Seguindo: ${user.numberFollowing}</p>
                                 </div>
-                             </div>`  
-               
-        let repositoriesItens = ''
-        user.repositories.forEach(repo => repositoriesItens += `<li><a href="${repo.html_url}"target="_blank">${repo.name}</a></li>`) 
-        
-        if(user.repositories.length > 0){
+                             </div>`
+
+
+        let repositoriesItens = '';
+        user.repositories.forEach(repo => {
+            const language = repo.language ?? "Linguagem não especificada";
+            repositoriesItens += `<li>
+                                     <a href="${repo.html_url}" target="_blank">
+                                         ${repo.name} 🍴${repo.forks_count} ⭐${repo.stargazers_count} 👀${repo.watchers_count} 💻${language}
+                                     </a>
+                                 </li>`;
+        });
+
+        if (user.repositories.length > 0) {
             this.userProfile.innerHTML += `<div class="repositories-events section">
                                                 <h2>Repositórios</h2>
                                                 <ul>${repositoriesItens}</ul>
                                             </div>`
         }
 
+
+
         let eventItens = ''
-        if(Array.isArray(user.events) && user.events.length > 0){
-            user.events.forEach(event =>{
+        if (Array.isArray(user.events) && user.events.length > 0) {
+            user.events.forEach(event => {
                 if (event.payload && event.payload.description) {
                     if (event.type === 'CreateEvent') {
-                        eventItens += `<li><strong>${event.repo.name}</strong>: Criou algo no repositório.</li>`
+                        eventItens += `<li><strong>${event.repo.name}</strong> - Criou algo no repositório.</li>`
                     } else if (event.type === 'PushEvent') {
-                        eventItens += `<li><strong>${event.repo.name}</strong>: Realizou um push no repositório.</li>`
+                        eventItens += `<li><strong>${event.repo.name}</strong> - Realizou um push no repositório.</li>`
                     }
                 }
 
             })
-        } 
-        if (eventItens){
-        this.userProfile.innerHTML += `<div class="repositories-events section">
+        }
+        if (eventItens) {
+            this.userProfile.innerHTML += `<div class="repositories-events section">
                                             <h2>Eventos</h2>
                                             <ul>${eventItens}</ul>
                                         </div>`
@@ -46,15 +56,15 @@ const screen = {
                                           </div>`
         }
 
-        
 
 
-    
+
+
 
 
 
     },
-    renderNotFound(){
+    renderNotFound() {
         this.userProfile.innerHTML = '<h3>Usuário não encontrado</h3>'
     }
 }
